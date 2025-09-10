@@ -3,13 +3,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, Brain, Target, Headphones, Trophy, BarChart3, Users, Settings } from "lucide-react";
+import { BookOpen, Brain, Target, Headphones, Trophy, BarChart3, Users, Settings, Calendar, Award } from "lucide-react";
 import AssessmentInterface from "@/components/AssessmentInterface";
 import LearningDashboard from "@/components/LearningDashboard";
 import PracticeMode from "@/components/PracticeMode";
+import AnalyticsDashboard from "@/components/AnalyticsDashboard";
+import TeacherDashboard from "@/components/TeacherDashboard";
+import StudentSettings from "@/components/StudentSettings";
+import StudyPlan from "@/components/StudyPlan";
 
 const Index = () => {
-  const [activeSection, setActiveSection] = useState<'dashboard' | 'assessment' | 'practice'>('dashboard');
+  const [activeSection, setActiveSection] = useState<'dashboard' | 'assessment' | 'practice' | 'analytics' | 'teacher' | 'settings' | 'studyplan'>('dashboard');
   const [studentProfile] = useState({
     name: "Alex Chen",
     grade: "8th Grade",
@@ -33,6 +37,14 @@ const Index = () => {
         return <AssessmentInterface onBack={() => setActiveSection('dashboard')} />;
       case 'practice':
         return <PracticeMode onBack={() => setActiveSection('dashboard')} />;
+      case 'analytics':
+        return <AnalyticsDashboard onBack={() => setActiveSection('dashboard')} />;
+      case 'teacher':
+        return <TeacherDashboard onBack={() => setActiveSection('dashboard')} />;
+      case 'settings':
+        return <StudentSettings onBack={() => setActiveSection('dashboard')} />;
+      case 'studyplan':
+        return <StudyPlan onBack={() => setActiveSection('dashboard')} />;
       default:
         return <LearningDashboard student={studentProfile} onStartAssessment={() => setActiveSection('assessment')} onStartPractice={() => setActiveSection('practice')} />;
     }
@@ -53,7 +65,7 @@ const Index = () => {
                 <p className="text-sm text-muted-foreground">Adaptive AI Learning Platform</p>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
               <Button
                 variant={activeSection === 'dashboard' ? 'default' : 'outline'}
                 size="sm"
@@ -77,6 +89,38 @@ const Index = () => {
               >
                 <BookOpen className="h-4 w-4 mr-2" />
                 Practice
+              </Button>
+              <Button
+                variant={activeSection === 'analytics' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setActiveSection('analytics')}
+              >
+                <Trophy className="h-4 w-4 mr-2" />
+                Analytics
+              </Button>
+              <Button
+                variant={activeSection === 'studyplan' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setActiveSection('studyplan')}
+              >
+                <Calendar className="h-4 w-4 mr-2" />
+                Study Plan
+              </Button>
+              <Button
+                variant={activeSection === 'teacher' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setActiveSection('teacher')}
+              >
+                <Users className="h-4 w-4 mr-2" />
+                Teacher
+              </Button>
+              <Button
+                variant={activeSection === 'settings' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setActiveSection('settings')}
+              >
+                <Settings className="h-4 w-4 mr-2" />
+                Settings
               </Button>
             </div>
           </div>
