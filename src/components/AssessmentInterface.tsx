@@ -5,18 +5,10 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Clock, Brain, CheckCircle, XCircle, BarChart3 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { percentageQuestions, getDifficultyLevel, getDifficultyName, getRandomQuestionByDifficulty, Question } from '@/data/questions';
 
 interface AssessmentInterfaceProps {
   onBack: () => void;
-}
-
-interface Question {
-  id: number;
-  text: string;
-  options: string[];
-  correctAnswer: number;
-  difficulty: number;
-  fundamental: 'listening' | 'grasping' | 'retention' | 'application';
 }
 
 const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
@@ -30,49 +22,19 @@ const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
 
-  // Sample adaptive questions
-  const [questions] = useState<Question[]>([
-    {
-      id: 1,
-      text: "A car travels 60 km in 1 hour. What is its speed in km/h?",
-      options: ["30 km/h", "60 km/h", "90 km/h", "120 km/h"],
-      correctAnswer: 1,
-      difficulty: 3,
-      fundamental: 'grasping'
-    },
-    {
-      id: 2,
-      text: "If a train travels at 80 km/h for 2.5 hours, how far does it travel?",
-      options: ["160 km", "200 km", "240 km", "320 km"],
-      correctAnswer: 1,
-      difficulty: 5,
-      fundamental: 'application'
-    },
-    {
-      id: 3,
-      text: "What is the formula for calculating speed?",
-      options: ["Speed = Time × Distance", "Speed = Distance ÷ Time", "Speed = Distance + Time", "Speed = Distance - Time"],
-      correctAnswer: 1,
-      difficulty: 2,
-      fundamental: 'retention'
-    },
-    {
-      id: 4,
-      text: "A cyclist covers 15 km in 30 minutes. What is the speed in km/h?",
-      options: ["25 km/h", "30 km/h", "35 km/h", "40 km/h"],
-      correctAnswer: 1,
-      difficulty: 6,
-      fundamental: 'application'
-    },
-    {
-      id: 5,
-      text: "Listen carefully: If you walk for 2 hours at 4 km/h, then run for 1 hour at 12 km/h, what is your total distance?",
-      options: ["16 km", "20 km", "24 km", "28 km"],
-      correctAnswer: 1,
-      difficulty: 7,
-      fundamental: 'listening'
+  // Current question from the adaptive selection
+  const [currentQuestionData, setCurrentQuestionData] = useState<Question | null>(null);
+  const [usedQuestions, setUsedQuestions] = useState<number[]>([]);
+  const totalQuestions = 10;
+
+  // Initialize first question
+  useEffect(() => {
+    const firstQuestion = getRandomQuestionByDifficulty(getDifficultyName(difficulty));
+    if (firstQuestion) {
+      setCurrentQuestionData(firstQuestion);
+      setUsedQuestions([firstQuestion.id]);
     }
-  ]);
+  }, []);
 
   // Timer effect
   useEffect(() => {
@@ -89,29 +51,33 @@ const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
   };
 
   const handleNextQuestion = () => {
-    if (selectedAnswer === null) return;
+    if (selectedAnswer === null || !currentQuestionData) return;
 
-    const isCorrect = selectedAnswer === questions[currentQuestion].correctAnswer;
+    // Convert letter answer to index (a=0, b=1, c=2, d=3)
+    const correctAnswerIndex = currentQuestionData.answer.charCodeAt(0) - 97;
+    const isCorrect = selectedAnswer === correctAnswerIndex;
     const newAnswers = [...answers, selectedAnswer];
     setAnswers(newAnswers);
 
-    // Adaptive difficulty adjustment
+    // Adaptive difficulty adjustment based on difficulty levels
+    let newDifficulty = difficulty;
     if (isCorrect) {
       setScore(score + Math.max(1, difficulty));
-      setDifficulty(Math.min(10, difficulty + 1));
+      newDifficulty = Math.min(4, difficulty + 1); // Max difficulty level 4
       toast({
         title: "Correct!",
         description: "Great job! Moving to next question.",
       });
     } else {
-      setDifficulty(Math.max(1, difficulty - 1));
+      newDifficulty = Math.max(1, difficulty - 1); // Min difficulty level 1
       toast({
         title: "Incorrect",
         description: "Don't worry, let's try the next one.",
         variant: "destructive",
       });
     }
-
+    
+    setDifficulty(newDifficulty);
     setShowResult(true);
     
     // Show result briefly, then move to next question
@@ -119,12 +85,47 @@ const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
       setShowResult(false);
       setSelectedAnswer(null);
       
-      if (currentQuestion < questions.length - 1) {
-        setCurrentQuestion(currentQuestion + 1);
+      if (currentQuestion < totalQuestions - 1) {
+        // Get next question with new difficulty
+        const nextQuestion = getNextQuestion(newDifficulty);
+        if (nextQuestion) {
+          setCurrentQuestionData(nextQuestion);
+          setUsedQuestions([...usedQuestions, nextQuestion.id]);
+          setCurrentQuestion(currentQuestion + 1);
+        } else {
+          handleSubmitAssessment();
+        }
       } else {
         handleSubmitAssessment();
       }
     }, 1500);
+  };
+
+  const getNextQuestion = (difficultyLevel: number): Question | null => {
+    const difficultyName = getDifficultyName(difficultyLevel);
+    const availableQuestions = percentageQuestions.filter(q => 
+      q.difficulty === difficultyName && !usedQuestions.includes(q.id)
+    );
+    
+    if (availableQuestions.length === 0) {
+      // Try adjacent difficulty levels if no questions available
+      const adjacentDifficulties = [
+        getDifficultyName(Math.max(1, difficultyLevel - 1)),
+        getDifficultyName(Math.min(4, difficultyLevel + 1))
+      ];
+      
+      for (const adjDiff of adjacentDifficulties) {
+        const adjQuestions = percentageQuestions.filter(q => 
+          q.difficulty === adjDiff && !usedQuestions.includes(q.id)
+        );
+        if (adjQuestions.length > 0) {
+          return adjQuestions[Math.floor(Math.random() * adjQuestions.length)];
+        }
+      }
+      return null;
+    }
+    
+    return availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
   };
 
   const handleSubmitAssessment = () => {
@@ -142,15 +143,11 @@ const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
   };
 
   const getProgressPercentage = () => {
-    return ((currentQuestion + 1) / questions.length) * 100;
+    return ((currentQuestion + 1) / totalQuestions) * 100;
   };
 
   if (isComplete) {
-    const correctAnswers = answers.reduce((count, answer, index) => {
-      return count + (answer === questions[index].correctAnswer ? 1 : 0);
-    }, 0);
-    
-    const finalScore = Math.round((correctAnswers / questions.length) * 100);
+    const finalScore = Math.round((score / totalQuestions) * 100);
 
     return (
       <div className="max-w-4xl mx-auto space-y-6">
@@ -178,12 +175,12 @@ const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
                 <h4 className="font-semibold">Performance Breakdown</h4>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span>Correct Answers</span>
-                    <span className="font-medium">{correctAnswers}/{questions.length}</span>
+                    <span>Questions Completed</span>
+                    <span className="font-medium">{currentQuestion + 1}/{totalQuestions}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Final Difficulty Level</span>
-                    <Badge variant="secondary">{difficulty}/10</Badge>
+                    <Badge variant="secondary">{getDifficultyName(difficulty)}</Badge>
                   </div>
                   <div className="flex justify-between">
                     <span>Adaptive Score</span>
@@ -220,7 +217,21 @@ const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
     );
   }
 
-  const question = questions[currentQuestion];
+  if (!currentQuestionData) {
+    return (
+      <div className="max-w-4xl mx-auto space-y-6">
+        <Button onClick={onBack} variant="outline">
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Dashboard
+        </Button>
+        <Card>
+          <CardContent className="pt-6 text-center">
+            <div>Loading assessment...</div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -236,7 +247,7 @@ const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
             <span className="font-mono">{formatTime(timeLeft)}</span>
           </div>
           <Badge className="bg-fundamentals-application text-white">
-            Difficulty: {difficulty}/10
+            Difficulty: {getDifficultyName(difficulty)}
           </Badge>
         </div>
       </div>
@@ -247,7 +258,7 @@ const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span>Progress</span>
-              <span>{currentQuestion + 1} of {questions.length}</span>
+              <span>{currentQuestion + 1} of {totalQuestions}</span>
             </div>
             <Progress value={getProgressPercentage()} className="h-2" />
           </div>
@@ -258,49 +269,57 @@ const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
       <Card className="min-h-[400px]">
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
-            <Brain className={`h-5 w-5 text-fundamentals-${question.fundamental}`} />
+            <Brain className="h-5 w-5 text-primary" />
             <span>Question {currentQuestion + 1}</span>
-            <Badge className={`bg-fundamentals-${question.fundamental} text-white capitalize`}>
-              {question.fundamental}
+            <Badge className="bg-primary text-white">
+              {currentQuestionData.tags[0]}
             </Badge>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="text-lg font-medium leading-relaxed">
-            {question.text}
+            {currentQuestionData.question_text}
           </div>
 
           <div className="space-y-3">
-            {question.options.map((option, index) => (
-              <Button
-                key={index}
-                variant={selectedAnswer === index ? "default" : "outline"}
-                className={`w-full p-4 h-auto text-left justify-start ${
-                  showResult
-                    ? index === question.correctAnswer
-                      ? "bg-success hover:bg-success"
-                      : index === selectedAnswer && index !== question.correctAnswer
-                      ? "bg-destructive hover:bg-destructive"
+            {[
+              currentQuestionData.option_a,
+              currentQuestionData.option_b,
+              currentQuestionData.option_c,
+              currentQuestionData.option_d
+            ].map((option, index) => {
+              const correctAnswerIndex = currentQuestionData.answer.charCodeAt(0) - 97;
+              return (
+                <Button
+                  key={index}
+                  variant={selectedAnswer === index ? "default" : "outline"}
+                  className={`w-full p-4 h-auto text-left justify-start ${
+                    showResult
+                      ? index === correctAnswerIndex
+                        ? "bg-success hover:bg-success text-white"
+                        : index === selectedAnswer && index !== correctAnswerIndex
+                        ? "bg-destructive hover:bg-destructive text-white"
+                        : ""
                       : ""
-                    : ""
-                }`}
-                onClick={() => !showResult && handleAnswerSelect(index)}
-                disabled={showResult}
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="w-6 h-6 rounded-full border-2 flex items-center justify-center text-xs font-medium">
-                    {String.fromCharCode(65 + index)}
+                  }`}
+                  onClick={() => !showResult && handleAnswerSelect(index)}
+                  disabled={showResult}
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className="w-6 h-6 rounded-full border-2 flex items-center justify-center text-xs font-medium">
+                      {String.fromCharCode(65 + index)}
+                    </div>
+                    <span className="flex-1">{option}</span>
+                    {showResult && index === correctAnswerIndex && (
+                      <CheckCircle className="h-5 w-5" />
+                    )}
+                    {showResult && index === selectedAnswer && index !== correctAnswerIndex && (
+                      <XCircle className="h-5 w-5" />
+                    )}
                   </div>
-                  <span className="flex-1">{option}</span>
-                  {showResult && index === question.correctAnswer && (
-                    <CheckCircle className="h-5 w-5 text-success-foreground" />
-                  )}
-                  {showResult && index === selectedAnswer && index !== question.correctAnswer && (
-                    <XCircle className="h-5 w-5 text-destructive-foreground" />
-                  )}
-                </div>
-              </Button>
-            ))}
+                </Button>
+              );
+            })}
           </div>
 
           {!showResult && (
@@ -310,7 +329,7 @@ const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
               className="w-full"
               size="lg"
             >
-              {currentQuestion === questions.length - 1 ? "Complete Assessment" : "Next Question"}
+              {currentQuestion === totalQuestions - 1 ? "Complete Assessment" : "Next Question"}
             </Button>
           )}
         </CardContent>
