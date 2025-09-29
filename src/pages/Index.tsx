@@ -51,33 +51,23 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-mesh opacity-40"></div>
-        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl float-animation"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-success/10 rounded-full blur-3xl float-animation" style={{animationDelay: '2s'}}></div>
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-warning/10 rounded-full blur-3xl float-animation" style={{animationDelay: '4s'}}></div>
-      </div>
-
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="relative border-b backdrop-blur-lg glass-card border-0 rounded-none">
-        <div className="container mx-auto px-6 py-6">
+      <header className="border-b bg-card">
+        <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="relative flex h-12 w-12 items-center justify-center rounded-xl btn-3d bg-gradient-to-br from-primary to-primary-hover">
-                <Brain className="h-7 w-7 text-white" />
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-white/20 to-transparent"></div>
+            <div className="flex items-center space-x-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <Brain className="h-6 w-6" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold gradient-text">AdaptiLearn AI</h1>
-                <p className="text-sm text-muted-foreground font-medium">Next-Generation Adaptive Learning</p>
+                <h1 className="text-xl font-semibold">AdaptiLearn</h1>
+                <p className="text-sm text-muted-foreground">Adaptive AI Learning Platform</p>
               </div>
             </div>
-            <div className="flex items-center space-x-3 stagger-children">
+            <div className="flex items-center space-x-2">
               <Button
                 variant={activeSection === 'dashboard' ? 'default' : 'outline'}
-                className={`btn-3d morph-shape ${activeSection === 'dashboard' ? 'pulse-glow' : ''}`}
                 size="sm"
                 onClick={() => setActiveSection('dashboard')}
               >
@@ -86,7 +76,6 @@ const Index = () => {
               </Button>
               <Button
                 variant={activeSection === 'assessment' ? 'default' : 'outline'}
-                className={`btn-3d morph-shape ${activeSection === 'assessment' ? 'pulse-glow' : ''}`}
                 size="sm"
                 onClick={() => setActiveSection('assessment')}
               >
@@ -95,7 +84,6 @@ const Index = () => {
               </Button>
               <Button
                 variant={activeSection === 'practice' ? 'default' : 'outline'}
-                className={`btn-3d morph-shape ${activeSection === 'practice' ? 'pulse-glow' : ''}`}
                 size="sm"
                 onClick={() => setActiveSection('practice')}
               >
@@ -104,7 +92,6 @@ const Index = () => {
               </Button>
               <Button
                 variant={activeSection === 'analytics' ? 'default' : 'outline'}
-                className={`btn-3d morph-shape ${activeSection === 'analytics' ? 'pulse-glow' : ''}`}
                 size="sm"
                 onClick={() => setActiveSection('analytics')}
               >
@@ -113,7 +100,6 @@ const Index = () => {
               </Button>
               <Button
                 variant={activeSection === 'studyplan' ? 'default' : 'outline'}
-                className={`btn-3d morph-shape ${activeSection === 'studyplan' ? 'pulse-glow' : ''}`}
                 size="sm"
                 onClick={() => setActiveSection('studyplan')}
               >
@@ -122,7 +108,6 @@ const Index = () => {
               </Button>
               <Button
                 variant={activeSection === 'teacher' ? 'default' : 'outline'}
-                className={`btn-3d morph-shape ${activeSection === 'teacher' ? 'pulse-glow' : ''}`}
                 size="sm"
                 onClick={() => setActiveSection('teacher')}
               >
@@ -131,7 +116,6 @@ const Index = () => {
               </Button>
               <Button
                 variant={activeSection === 'settings' ? 'default' : 'outline'}
-                className={`btn-3d morph-shape ${activeSection === 'settings' ? 'pulse-glow' : ''}`}
                 size="sm"
                 onClick={() => setActiveSection('settings')}
               >
@@ -144,10 +128,8 @@ const Index = () => {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-6 py-8 relative">
-        <div className="slide-in-up">
-          {renderActiveSection()}
-        </div>
+      <main className="container mx-auto px-4 py-6">
+        {renderActiveSection()}
       </main>
     </div>
   );
