@@ -234,54 +234,62 @@ const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
-        <Button onClick={onBack} variant="outline">
+    <div className="max-w-5xl mx-auto space-y-8">
+      <div className="flex items-center justify-between stagger-children">
+        <Button onClick={onBack} variant="outline" className="btn-3d morph-shape">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Dashboard
         </Button>
         
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
-            <Clock className="h-4 w-4 text-muted-foreground" />
-            <span className="font-mono">{formatTime(timeLeft)}</span>
+        <div className="flex items-center space-x-6">
+          <div className="glass-card px-4 py-2 rounded-lg flex items-center space-x-3">
+            <Clock className="h-5 w-5 text-primary" />
+            <span className="font-mono text-lg font-bold">{formatTime(timeLeft)}</span>
           </div>
-          <Badge className="bg-fundamentals-application text-white">
+          <Badge className="px-4 py-2 text-sm font-medium gradient-text bg-gradient-to-r from-primary/10 to-primary/20 border border-primary/30">
             Difficulty: {getDifficultyName(difficulty)}
           </Badge>
         </div>
       </div>
 
-      {/* Progress Bar */}
-      <Card>
+      {/* Enhanced Progress Bar */}
+      <Card className="glass-card">
         <CardContent className="pt-6">
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>Progress</span>
-              <span>{currentQuestion + 1} of {totalQuestions}</span>
+          <div className="space-y-4">
+            <div className="flex justify-between text-sm font-medium">
+              <span className="gradient-text">Assessment Progress</span>
+              <span className="text-primary font-bold">{currentQuestion + 1} of {totalQuestions}</span>
             </div>
-            <Progress value={getProgressPercentage()} className="h-2" />
+            <div className="relative">
+              <Progress value={getProgressPercentage()} className="h-3 bg-muted/50" />
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-success/20 rounded-full opacity-50"></div>
+            </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Question Card */}
-      <Card className="min-h-[400px]">
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Brain className="h-5 w-5 text-primary" />
-            <span>Question {currentQuestion + 1}</span>
-            <Badge className="bg-primary text-white">
+      {/* Enhanced Question Card */}
+      <Card className="glass-card min-h-[500px] overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-full"></div>
+        <CardHeader className="relative z-10">
+          <CardTitle className="flex items-center space-x-3 text-xl">
+            <div className="p-2 rounded-lg bg-gradient-to-br from-primary to-primary-hover">
+              <Brain className="h-6 w-6 text-white" />
+            </div>
+            <span className="gradient-text">Question {currentQuestion + 1}</span>
+            <Badge className="px-3 py-1 bg-gradient-to-r from-success to-success-glow text-white border-0">
               {currentQuestionData.tags[0]}
             </Badge>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="text-lg font-medium leading-relaxed">
-            {currentQuestionData.question_text}
+        <CardContent className="space-y-8 relative z-10">
+          <div className="p-6 glass-card rounded-xl">
+            <div className="text-xl font-medium leading-relaxed text-foreground">
+              {currentQuestionData.question_text}
+            </div>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-4 stagger-children">
             {[
               currentQuestionData.option_a,
               currentQuestionData.option_b,
@@ -293,28 +301,32 @@ const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
                 <Button
                   key={index}
                   variant={selectedAnswer === index ? "default" : "outline"}
-                  className={`w-full p-4 h-auto text-left justify-start ${
+                  className={`w-full p-6 h-auto text-left justify-start glass-card morph-shape transition-all duration-300 ${
+                    selectedAnswer === index ? 'transform scale-[1.02] btn-3d' : 'hover:scale-[1.01]'
+                  } ${
                     showResult
                       ? index === correctAnswerIndex
-                        ? "bg-success hover:bg-success text-white"
+                        ? "bg-gradient-to-r from-success to-success-glow text-white border-success success-glow"
                         : index === selectedAnswer && index !== correctAnswerIndex
-                        ? "bg-destructive hover:bg-destructive text-white"
-                        : ""
+                        ? "bg-gradient-to-r from-destructive to-destructive/80 text-white border-destructive"
+                        : "opacity-60"
                       : ""
                   }`}
                   onClick={() => !showResult && handleAnswerSelect(index)}
                   disabled={showResult}
                 >
-                  <div className="flex items-center space-x-3">
-                    <div className="w-6 h-6 rounded-full border-2 flex items-center justify-center text-xs font-medium">
+                  <div className="flex items-center space-x-4 w-full">
+                    <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold transition-all ${
+                      selectedAnswer === index ? 'bg-white text-primary' : 'border-primary/50'
+                    }`}>
                       {String.fromCharCode(65 + index)}
                     </div>
-                    <span className="flex-1">{option}</span>
+                    <span className="flex-1 font-medium">{option}</span>
                     {showResult && index === correctAnswerIndex && (
-                      <CheckCircle className="h-5 w-5" />
+                      <CheckCircle className="h-6 w-6 text-white" />
                     )}
                     {showResult && index === selectedAnswer && index !== correctAnswerIndex && (
-                      <XCircle className="h-5 w-5" />
+                      <XCircle className="h-6 w-6 text-white" />
                     )}
                   </div>
                 </Button>
@@ -326,10 +338,10 @@ const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
             <Button 
               onClick={handleNextQuestion} 
               disabled={selectedAnswer === null}
-              className="w-full"
+              className="w-full h-14 text-lg font-semibold btn-3d bg-gradient-to-r from-primary to-primary-hover"
               size="lg"
             >
-              {currentQuestion === totalQuestions - 1 ? "Complete Assessment" : "Next Question"}
+              {currentQuestion === totalQuestions - 1 ? "🎯 Complete Assessment" : "Next Question →"}
             </Button>
           )}
         </CardContent>
