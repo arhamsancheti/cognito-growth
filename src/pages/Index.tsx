@@ -19,7 +19,7 @@ const Index = () => {
     grade: "8th Grade",
     overallScore: 76,
     fundamentals: {
-      listening: 85,
+      attentionConsistency: 85,
       grasping: 72,
       retention: 68,
       application: 80

@@ -59,7 +59,7 @@ export default {
           light: "hsl(var(--warning-light))",
         },
         fundamentals: {
-          listening: "hsl(var(--listening))",
+          attentionConsistency: "hsl(var(--attention-consistency))",
           grasping: "hsl(var(--grasping))",
           retention: "hsl(var(--retention))",
           application: "hsl(var(--application))",

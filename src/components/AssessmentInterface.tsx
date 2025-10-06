@@ -193,8 +193,8 @@ const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
                 <h4 className="font-semibold">Learning Fundamentals</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span>Listening Skills</span>
-                    <Badge className="bg-fundamentals-listening text-white">85%</Badge>
+                    <span>Attention Consistency</span>
+                    <Badge className="bg-fundamentals-attention-consistency text-white">85%</Badge>
                   </div>
                   <div className="flex justify-between">
                     <span>Grasping Power</span>

@@ -11,10 +11,10 @@ interface AnalyticsDashboardProps {
 
 const AnalyticsDashboard = ({ onBack }: AnalyticsDashboardProps) => {
   const weeklyProgress = [
-    { week: "Week 1", listening: 65, grasping: 70, retention: 60, application: 55 },
-    { week: "Week 2", listening: 72, grasping: 75, retention: 68, application: 62 },
-    { week: "Week 3", listening: 78, grasping: 80, retention: 75, application: 70 },
-    { week: "Week 4", listening: 82, grasping: 85, retention: 80, application: 75 }
+    { week: "Week 1", attentionConsistency: 65, grasping: 70, retention: 60, application: 55 },
+    { week: "Week 2", attentionConsistency: 72, grasping: 75, retention: 68, application: 62 },
+    { week: "Week 3", attentionConsistency: 78, grasping: 80, retention: 75, application: 70 },
+    { week: "Week 4", attentionConsistency: 82, grasping: 85, retention: 80, application: 75 }
   ];
 
   const achievements = [
@@ -89,15 +89,15 @@ const AnalyticsDashboard = ({ onBack }: AnalyticsDashboardProps) => {
                   <div key={index} className="space-y-3">
                     <h4 className="font-medium flex items-center justify-between">
                       <span>{week.week}</span>
-                      <Badge variant="outline">{Math.round((week.listening + week.grasping + week.retention + week.application) / 4)}% avg</Badge>
+                      <Badge variant="outline">{Math.round((week.attentionConsistency + week.grasping + week.retention + week.application) / 4)}% avg</Badge>
                     </h4>
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                       <div className="space-y-2">
                         <div className="flex justify-between text-sm">
-                          <span>Listening</span>
-                          <span>{week.listening}%</span>
+                          <span>Attention Consistency</span>
+                          <span>{week.attentionConsistency}%</span>
                         </div>
-                        <Progress value={week.listening} className="h-2" />
+                        <Progress value={week.attentionConsistency} className="h-2" />
                       </div>
                       <div className="space-y-2">
                         <div className="flex justify-between text-sm">

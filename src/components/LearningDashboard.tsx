@@ -9,7 +9,7 @@ interface StudentProfile {
   grade: string;
   overallScore: number;
   fundamentals: {
-    listening: number;
+    attentionConsistency: number;
     grasping: number;
     retention: number;
     application: number;
@@ -30,7 +30,7 @@ interface LearningDashboardProps {
 
 const LearningDashboard = ({ student, onStartAssessment, onStartPractice }: LearningDashboardProps) => {
   const fundamentalsData = [
-    { name: "Listening Skills", icon: Headphones, value: student.fundamentals.listening, color: "fundamentals-listening", description: "Concentration during lessons" },
+    { name: "Attention Consistency", icon: Headphones, value: student.fundamentals.attentionConsistency, color: "fundamentals-attention-consistency", description: "Focus and Accuracy Stability" },
     { name: "Grasping Power", icon: Brain, value: student.fundamentals.grasping, color: "fundamentals-grasping", description: "Comprehension ability" },
     { name: "Retention Power", icon: BookOpen, value: student.fundamentals.retention, color: "fundamentals-retention", description: "Memory during revision" },
     { name: "Practice Application", icon: Target, value: student.fundamentals.application, color: "fundamentals-application", description: "Applying concepts" }

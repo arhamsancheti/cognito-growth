@@ -22,7 +22,7 @@ const PracticeMode = ({ onBack }: PracticeModeProps) => {
   ];
 
   const practiceStrengths = [
-    { fundamental: "Listening Skills", weakness: "Medium", color: "fundamentals-listening", improvement: "+12%" },
+    { fundamental: "Attention Consistency", weakness: "Medium", color: "fundamentals-attention-consistency", improvement: "+12%" },
     { fundamental: "Grasping Power", weakness: "Low", color: "fundamentals-grasping", improvement: "+8%" },
     { fundamental: "Retention Power", weakness: "High", color: "fundamentals-retention", improvement: "+5%" },
     { fundamental: "Practice Application", weakness: "Medium", color: "fundamentals-application", improvement: "+15%" }

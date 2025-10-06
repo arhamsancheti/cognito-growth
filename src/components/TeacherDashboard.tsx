@@ -33,7 +33,7 @@ const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
       recentActivity: "2 hours ago",
       weakAreas: ["Application"],
       status: "excellent",
-      fundamentals: { listening: 95, grasping: 90, retention: 88, application: 85 }
+      fundamentals: { attentionConsistency: 95, grasping: 90, retention: 88, application: 85 }
     },
     {
       id: 2,
@@ -41,9 +41,9 @@ const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
       overallScore: 78,
       trend: "stable",
       recentActivity: "5 hours ago",
-      weakAreas: ["Retention", "Listening"],
+      weakAreas: ["Retention", "Attention Consistency"],
       status: "good",
-      fundamentals: { listening: 70, grasping: 85, retention: 72, application: 80 }
+      fundamentals: { attentionConsistency: 70, grasping: 85, retention: 72, application: 80 }
     },
     {
       id: 3,
@@ -53,7 +53,7 @@ const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
       recentActivity: "1 day ago",
       weakAreas: ["Grasping", "Retention", "Application"],
       status: "attention",
-      fundamentals: { listening: 60, grasping: 40, retention: 35, application: 45 }
+      fundamentals: { attentionConsistency: 60, grasping: 40, retention: 35, application: 45 }
     },
     {
       id: 4,
@@ -61,9 +61,9 @@ const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
       overallScore: 85,
       trend: "up",
       recentActivity: "30 min ago",
-      weakAreas: ["Listening"],
+      weakAreas: ["Attention Consistency"],
       status: "excellent",
-      fundamentals: { listening: 75, grasping: 90, retention: 88, application: 87 }
+      fundamentals: { attentionConsistency: 75, grasping: 90, retention: 88, application: 87 }
     },
     {
       id: 5,
@@ -73,7 +73,7 @@ const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
       recentActivity: "3 hours ago",
       weakAreas: ["Application", "Grasping"],
       status: "improving",
-      fundamentals: { listening: 70, grasping: 55, retention: 75, application: 48 }
+      fundamentals: { attentionConsistency: 70, grasping: 55, retention: 75, application: 48 }
     }
   ];
 
@@ -247,10 +247,10 @@ const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
                       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                         <div className="space-y-1">
                           <div className="flex justify-between text-sm">
-                            <span>Listening</span>
-                            <span>{student.fundamentals.listening}%</span>
+                            <span>Attention Consistency</span>
+                            <span>{student.fundamentals.attentionConsistency}%</span>
                           </div>
-                          <Progress value={student.fundamentals.listening} className="h-2" />
+                          <Progress value={student.fundamentals.attentionConsistency} className="h-2" />
                         </div>
                         <div className="space-y-1">
                           <div className="flex justify-between text-sm">
@@ -406,9 +406,9 @@ const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
                   </p>
                 </div>
                 <div className="p-4 border rounded-lg">
-                  <h4 className="font-medium">Listening Skills Workshop</h4>
+                  <h4 className="font-medium">Attention Consistency Workshop</h4>
                   <p className="text-sm text-muted-foreground mt-1">
-                    5 students show consistent listening challenges. A focused workshop could help improve concentration.
+                    5 students show consistent attention challenges. A focused workshop could help improve focus and accuracy.
                   </p>
                 </div>
                 <div className="p-4 border rounded-lg">
