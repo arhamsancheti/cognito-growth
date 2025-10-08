@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Clock, Brain, CheckCircle, XCircle, BarChart3 } from "lucide-react";
+import { ArrowLeft, Clock, Brain, CheckCircle, XCircle, BarChart3, Lightbulb } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { percentageQuestions, getDifficultyLevel, getDifficultyName, getRandomQuestionByDifficulty, Question } from '@/data/questions';
 
@@ -21,6 +21,8 @@ const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
+  const [hintLevel, setHintLevel] = useState(0); // 0 = no hint, 1 = small hint, 2 = solution shown
+  const [totalHintsUsed, setTotalHintsUsed] = useState(0);
 
   // Current question from the adaptive selection
   const [currentQuestionData, setCurrentQuestionData] = useState<Question | null>(null);
@@ -48,6 +50,17 @@ const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
 
   const handleAnswerSelect = (answerIndex: number) => {
     setSelectedAnswer(answerIndex);
+  };
+
+  const handleHintClick = () => {
+    if (hintLevel < 2) {
+      setHintLevel(hintLevel + 1);
+      setTotalHintsUsed(totalHintsUsed + 1);
+      toast({
+        title: hintLevel === 0 ? "Hint Revealed" : "Solution Revealed",
+        description: hintLevel === 0 ? "Check below the question for a hint!" : "The full solution is now visible.",
+      });
+    }
   };
 
   const handleNextQuestion = () => {
@@ -84,6 +97,7 @@ const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
     setTimeout(() => {
       setShowResult(false);
       setSelectedAnswer(null);
+      setHintLevel(0); // Reset hint level for next question
       
       if (currentQuestion < totalQuestions - 1) {
         // Get next question with new difficulty
@@ -186,6 +200,10 @@ const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
                     <span>Adaptive Score</span>
                     <span className="font-medium">{score} points</span>
                   </div>
+                  <div className="flex justify-between">
+                    <span>Hints Used</span>
+                    <span className="font-medium">{totalHintsUsed}</span>
+                  </div>
                 </div>
               </div>
 
@@ -281,6 +299,44 @@ const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
             {currentQuestionData.question_text}
           </div>
 
+          {!showResult && (
+            <Button
+              onClick={handleHintClick}
+              variant="outline"
+              size="sm"
+              disabled={hintLevel >= 2}
+              className="w-full sm:w-auto"
+            >
+              <Lightbulb className="h-4 w-4 mr-2" />
+              {hintLevel === 0 ? "Get Hint" : hintLevel === 1 ? "Show Solution" : "Solution Shown"}
+            </Button>
+          )}
+
+          {hintLevel > 0 && !showResult && (
+            <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg space-y-2">
+              <div className="flex items-start space-x-2">
+                <Lightbulb className="h-5 w-5 text-primary mt-0.5" />
+                <div className="flex-1">
+                  <p className="font-semibold text-sm">
+                    {hintLevel === 1 ? "Hint:" : "Solution:"}
+                  </p>
+                  <p className="text-sm mt-1">
+                    {hintLevel === 1 
+                      ? currentQuestionData.hint 
+                      : currentQuestionData.explanation}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showResult && !selectedAnswer && selectedAnswer !== 0 && (
+            <div className="p-4 bg-muted border border-border rounded-lg">
+              <p className="font-semibold text-sm mb-2">Solution:</p>
+              <p className="text-sm">{currentQuestionData.explanation}</p>
+            </div>
+          )}
+
           <div className="space-y-3">
             {[
               currentQuestionData.option_a,
@@ -321,6 +377,13 @@ const AssessmentInterface = ({ onBack }: AssessmentInterfaceProps) => {
               );
             })}
           </div>
+
+          {showResult && selectedAnswer !== null && selectedAnswer !== currentQuestionData.answer.charCodeAt(0) - 97 && (
+            <div className="p-4 bg-muted border border-border rounded-lg">
+              <p className="font-semibold text-sm mb-2">Solution:</p>
+              <p className="text-sm">{currentQuestionData.explanation}</p>
+            </div>
+          )}
 
           {!showResult && (
             <Button 

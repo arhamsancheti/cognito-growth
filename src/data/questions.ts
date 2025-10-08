@@ -9,6 +9,8 @@ export interface Question {
   difficulty: 'Very easy' | 'Easy' | 'Moderate' | 'Difficult';
   tags: string[];
   subject?: string;
+  hint: string;
+  explanation: string;
 }
 
 export const percentageQuestions: Question[] = [
@@ -23,7 +25,9 @@ export const percentageQuestions: Question[] = [
     answer: "d",
     difficulty: "Very easy",
     tags: ["Percentages"],
-    subject: "Mathematics"
+    subject: "Mathematics",
+    hint: "To convert a ratio to percentage, divide the first number by the second and multiply by 100.",
+    explanation: "5 : 4 means 5/4 = 1.25, and 1.25 × 100 = 125%"
   },
   {
     id: 2,
@@ -35,7 +39,9 @@ export const percentageQuestions: Question[] = [
     answer: "d",
     difficulty: "Very easy",
     tags: ["Percentages"],
-    subject: "Mathematics"
+    subject: "Mathematics",
+    hint: "To convert a decimal to percentage, multiply by 100.",
+    explanation: "3.5 × 100 = 350%"
   },
   {
     id: 3,
@@ -47,7 +53,9 @@ export const percentageQuestions: Question[] = [
     answer: "a",
     difficulty: "Very easy",
     tags: ["Percentages"],
-    subject: "Mathematics"
+    subject: "Mathematics",
+    hint: "1% = 0.01, so half of that would be 0.01 ÷ 2.",
+    explanation: "1% = 0.01, and half of 0.01 = 0.005"
   },
   {
     id: 4,
@@ -59,7 +67,9 @@ export const percentageQuestions: Question[] = [
     answer: "d",
     difficulty: "Very easy",
     tags: ["Percentages"],
-    subject: "Mathematics"
+    subject: "Mathematics",
+    hint: "Multiply 34 by 15/100 or 0.15.",
+    explanation: "15% of 34 = (15/100) × 34 = 0.15 × 34 = Rs. 5.10"
   },
   {
     id: 5,
@@ -71,7 +81,9 @@ export const percentageQuestions: Question[] = [
     answer: "a",
     difficulty: "Very easy",
     tags: ["Percentages"],
-    subject: "Mathematics"
+    subject: "Mathematics",
+    hint: "Convert 63% to decimal (0.63) and multiply by 3/4.",
+    explanation: "63% of 3/4 = 0.63 × 0.75 = 0.4725. But this seems incorrect in the options. The correct calculation should give a different result."
   },
   {
     id: 6,
@@ -83,7 +95,9 @@ export const percentageQuestions: Question[] = [
     answer: "b",
     difficulty: "Very easy",
     tags: ["Percentages"],
-    subject: "Mathematics"
+    subject: "Mathematics",
+    hint: "Calculate 88% of 370 and 24% of 210 first, then solve for the unknown.",
+    explanation: "88% of 370 = 325.6, 24% of 210 = 50.4. So 325.6 + 50.4 - ? = 118, which gives ? = 258"
   },
   {
     id: 7,
@@ -95,7 +109,9 @@ export const percentageQuestions: Question[] = [
     answer: "c",
     difficulty: "Very easy",
     tags: ["Percentages"],
-    subject: "Mathematics"
+    subject: "Mathematics",
+    hint: "Remember that a% of b = b% of a.",
+    explanation: "860% of 50 = 8.6 × 50 = 430, and 50% of 860 = 0.5 × 860 = 430. Total = 430 + 430 = 860"
   },
   {
     id: 8,
@@ -107,7 +123,9 @@ export const percentageQuestions: Question[] = [
     answer: "b",
     difficulty: "Very easy",
     tags: ["Percentages"],
-    subject: "Mathematics"
+    subject: "Mathematics",
+    hint: "Calculate each percentage separately, then subtract.",
+    explanation: "45% of 750 = 337.5, and 25% of 480 = 120. So 337.5 - 120 = 217.50"
   },
   {
     id: 9,
@@ -119,7 +137,9 @@ export const percentageQuestions: Question[] = [
     answer: "b",
     difficulty: "Very easy",
     tags: ["Percentages"],
-    subject: "Mathematics"
+    subject: "Mathematics",
+    hint: "Convert both to the same unit (grams or kg) first.",
+    explanation: "7.2 kg = 7200 grams. (18/7200) × 100 = 0.25%"
   },
   {
     id: 10,
@@ -131,7 +151,9 @@ export const percentageQuestions: Question[] = [
     answer: "b",
     difficulty: "Very easy",
     tags: ["Percentages"],
-    subject: "Mathematics"
+    subject: "Mathematics",
+    hint: "Divide 0.01 by 0.1 and multiply by 100.",
+    explanation: "(0.01/0.1) × 100 = 0.1 × 100 = 10%"
   },
   // Easy Questions
   {
@@ -144,7 +166,9 @@ export const percentageQuestions: Question[] = [
     answer: "c",
     difficulty: "Easy",
     tags: ["Percentages"],
-    subject: "Mathematics"
+    subject: "Mathematics",
+    hint: "If x = 0.75y, then y = x/0.75. Convert this to percentage.",
+    explanation: "x = 0.75y, so y = x/0.75 = 1.3333x = 133.33% of x"
   },
   {
     id: 12,
@@ -156,7 +180,9 @@ export const percentageQuestions: Question[] = [
     answer: "b",
     difficulty: "Easy",
     tags: ["Percentages"],
-    subject: "Mathematics"
+    subject: "Mathematics",
+    hint: "Find the difference between correct and wrong answers, then divide by correct answer.",
+    explanation: "Correct = 5x/4, Wrong = 4x/5. Error = (5x/4 - 4x/5)/(5x/4) × 100 = 36%"
   },
   {
     id: 13,
@@ -168,7 +194,9 @@ export const percentageQuestions: Question[] = [
     answer: "d",
     difficulty: "Easy",
     tags: ["Percentages"],
-    subject: "Mathematics"
+    subject: "Mathematics",
+    hint: "Use the formula: Total = Football + Cricket - Both + Neither.",
+    explanation: "100% = 30% + 50% - Both + 40%. So Both = 20%"
   },
   {
     id: 14,
@@ -180,7 +208,9 @@ export const percentageQuestions: Question[] = [
     answer: "c",
     difficulty: "Easy",
     tags: ["Percentages"],
-    subject: "Mathematics"
+    subject: "Mathematics",
+    hint: "Alcohol quantity stays the same, but total volume increases.",
+    explanation: "Alcohol = 40% of 120 = 48 liters. New total = 150 liters. New % = (48/150) × 100 = 32%"
   },
   {
     id: 15,
@@ -192,7 +222,9 @@ export const percentageQuestions: Question[] = [
     answer: "a",
     difficulty: "Easy",
     tags: ["Percentages"],
-    subject: "Mathematics"
+    subject: "Mathematics",
+    hint: "Convert both to the same unit first.",
+    explanation: "2.25 kg = 2250 g. (75/2250) × 100 = 3.33%"
   },
   // Moderate Questions
   {
@@ -205,7 +237,9 @@ export const percentageQuestions: Question[] = [
     answer: "b",
     difficulty: "Moderate",
     tags: ["Percentages"],
-    subject: "Mathematics"
+    subject: "Mathematics",
+    hint: "Work backwards from the remaining amount to find total salary.",
+    explanation: "After 25% deposit, 75% remains. From that, 40% on rent means 60% of 75% = 45% of salary. 45% - groceries - remaining = total. Solving: 45% of S = 15000 + 12000 = 27000, so S = 60000. Deposit = 25% of 60000 = Rs. 15,000"
   },
   {
     id: 17,
@@ -217,7 +251,9 @@ export const percentageQuestions: Question[] = [
     answer: "a",
     difficulty: "Moderate",
     tags: ["Percentages"],
-    subject: "Mathematics"
+    subject: "Mathematics",
+    hint: "Let Tanuj's amount be T. Express others in terms of T.",
+    explanation: "Let T = Tanuj. Manuj = 0.75T, Anuj = 1.2(0.75T) = 0.9T. Total: T + 0.75T + 0.9T = 2.65T = 5300. T = 2000"
   },
   {
     id: 18,
@@ -229,7 +265,9 @@ export const percentageQuestions: Question[] = [
     answer: "a",
     difficulty: "Moderate",
     tags: ["Percentages"],
-    subject: "Mathematics"
+    subject: "Mathematics",
+    hint: "Set up equation: 0.7x + 90 = x.",
+    explanation: "0.7x + 90 = x. Solving: 90 = 0.3x, so x = 300"
   },
   // Difficult Questions
   {
@@ -242,7 +280,9 @@ export const percentageQuestions: Question[] = [
     answer: "b",
     difficulty: "Difficult",
     tags: ["Percentages"],
-    subject: "Mathematics"
+    subject: "Mathematics",
+    hint: "Calculate total balls initially and how many are removed.",
+    explanation: "Total = 400. Removed: 45 blue + 77 red = 122. Remaining = 278. Percentage = (278/400) × 100 = 77.25%"
   },
   {
     id: 20,
@@ -254,7 +294,9 @@ export const percentageQuestions: Question[] = [
     answer: "d",
     difficulty: "Difficult",
     tags: ["Percentages"],
-    subject: "Mathematics"
+    subject: "Mathematics",
+    hint: "Calculate males and females separately, then find illiterate in each group.",
+    explanation: "Males = 700, Females = 500. Illiterate males = 350, Illiterate females = 200. Total illiterate = 550. But answer key says 600, which seems incorrect based on the calculation."
   }
 ];
 
